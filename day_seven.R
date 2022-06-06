@@ -1,5 +1,5 @@
 library("readr")
-path <- "C:/Users/USER/Downloads/DataDIAB/diabetes.csv"
+path <- "C:/Users/USER/Desktop/Data 1/diabetes.csv"
 df <- read_csv(path)
 View(df)
 

@@ -135,3 +135,17 @@ name_data <- data.frame(
   counts = name_count
 )
 print(name_data)
+
+
+datas <- c('james', 'lekee', 'zola', 'tolu', 'bolaji', 'tumuni', 'tolupej')
+even_names <- c()
+odd_names <- c()
+for (i in datas){
+  if (nchar(i)%%2 == 0){
+    even_names <- c(even_names, i)
+  } else{
+    odd_names <- c(odd_names, i)
+  }
+}
+print(even_names)
+print(odd_names)
