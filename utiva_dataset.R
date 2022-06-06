@@ -1,9 +1,12 @@
 library("readr")
 library("dplyr")
 
-path <- "C:/Users/USER/Desktop/Data 1/Assignment/Brewery_data.csv"
-df <- read_csv(path)
-View(df)
+file <- function(path){
+  df <- read_csv(path)
+  View(df)
+}
+
+file("C:/Users/USER/Desktop/Data 1/Assignment/Brewery_data.csv")
 
 territory <- c()
 
