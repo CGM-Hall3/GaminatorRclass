@@ -33,10 +33,12 @@ clean_df %>% tabyl(employee_status, full_time) %>%
 
 clean_df %>% tabyl(employee_status, full_time, subject)
 
-new_clean <- clean_df %>% remove_empty(whic = c("rows"))
-clean_new <- new_clean %>% remove_empty(whic = c("cols"))
+# Removing empty cols and rows
+new_clean <- clean_df %>% remove_empty(which = c("rows"))
+clean_new <- new_clean %>% remove_empty(which = c("cols"))
 View(clean_new)
 
+# Check for duplicates
 clean_new %>% get_dupes(first_name)
 dat <- clean_new %>% get_dupes(first_name, certification_9)
 View(dat)
@@ -44,11 +46,13 @@ View(dat)
 b <- clean_new$hire_date
 print(b)
 
+# Splitting the numerics and strings
 filtered_one <- clean_new %>% filter(!grepl('/', hire_date))
 View(filtered_one)
 filtered_two <- clean_new %>% filter(grepl('/', hire_date))
 View(filtered_two)
-glimpse(filtered_two)
+
+# Changing the numerics to date format
 num_date <- as.numeric(filtered_one$hire_date)
 clean_date <- excel_numeric_to_date(num_date)
 clean_date
@@ -56,20 +60,65 @@ clean_date
 clean_one <- filtered_one %>% mutate(hire_date = clean_date)
 View(clean_one)
 
+# Changing the strings to date format
 new_dt <- mdy(filtered_two$hire_date)
 clean_two <- filtered_two %>% 
   mutate(hire_date = new_dt)
 View(clean_two)
 
+# Concatting the data frames together
 new_df <- rbind(clean_one, clean_two)
 View(new_df)
 
+# Checking for null values
 # for (i in colnames(new_df)){
 # k <- sum(is.na(new_df[i]))
 # p <- paste(i, "=>", k, sep=" ")
 # print(p)
 # }
 
-# new_df$subject[is.na(new_df$subject)] <- mode(new_df$subject)
+# Replacing null values with the mode
+new_df$subject[is.na(new_df$subject)] <- "English"
 # new_df$certification_9[is.na(new_df$certification_9)] <- mode(new_df$certification_9)
 # new_df$certification_10[is.na(new_df$certification_10)] <- mode(new_df$certification_10)
+
+# Getting value counts
+print(table(new_df$subject))
+print(table(new_df$certification_9))
+#print(mode(new_df$subject))
+print(unique(new_df$subject))
+
+# Replacing bullshit values with the mode
+new_df$subject[new_df$subject == "#REF!"] <- "English"
+View(new_df)
+
+colnames(new_df)
+# Splitting the data frame % numbers and #N/A values
+filtered_percent <- new_df %>% filter(!grepl('%',percent_allocated ))
+filtered_percent2 <- new_df %>% filter(grepl('%',percent_allocated ))
+View(filtered_percent)
+
+# Creating a new vector to hold all the clean numbers
+new_col <- c()
+# Looping through the dirty numeric column
+for (num in filtered_percent2$percent_allocated){
+  # Getting all the digits before the %
+  new <- substr(num, 1, nchar(num) - 1)
+  # Changing the datatype
+  num_new <- as.numeric(new)
+  # Appending to the empty vector
+  new_col <- c(new_col, num_new)
+}
+
+
+
+write.csv(filtered_percent2,
+          "C:\\Users\\USER\\Desktop\\store_here2.csv",
+          row.names = FALSE)
+
+
+
+
+
+
+
