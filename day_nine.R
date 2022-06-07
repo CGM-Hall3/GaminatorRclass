@@ -110,10 +110,22 @@ for (num in filtered_percent2$percent_allocated){
   new_col <- c(new_col, num_new)
 }
 
+# Adding the new column to the data frame
+filtered_percent2 <- mutate(filtered_percent2, percent_allocated = new_col)
+View(filtered_percent2)
 
+# Replacing the bullshit values with the mean
+mm <- mean(filtered_percent2$percent_allocated)
+filtered_percent$percent_allocated[filtered_percent$percent_allocated == "#N/A"] <- mm
+View(filtered_percent)
 
-write.csv(filtered_percent2,
-          "C:\\Users\\USER\\Desktop\\store_here2.csv",
+# Concatting the data frames back together
+new_df <- rbind(filtered_percent, filtered_percent2)
+View(new_df)
+
+# Writting the clean df to a file
+write.csv(new_df,
+          "C:\\Users\\USER\\Desktop\\clean_data.csv",
           row.names = FALSE)
 
 
