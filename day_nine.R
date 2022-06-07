@@ -98,6 +98,7 @@ filtered_percent <- new_df %>% filter(!grepl('%',percent_allocated ))
 filtered_percent2 <- new_df %>% filter(grepl('%',percent_allocated ))
 View(filtered_percent)
 
+# Method 1:
 # Creating a new vector to hold all the clean numbers
 new_col <- c()
 # Looping through the dirty numeric column
@@ -109,6 +110,12 @@ for (num in filtered_percent2$percent_allocated){
   # Appending to the empty vector
   new_col <- c(new_col, num_new)
 }
+
+# Method 2:
+# filt_col <- filtered_percent2$percent_allocated
+# print(filt_col)
+# clean_col <- as.numeric(substr(filt_col, 1, nchar(filt_col) - 1))
+# print(clean_col)
 
 # Adding the new column to the data frame
 filtered_percent2 <- mutate(filtered_percent2, percent_allocated = new_col)
